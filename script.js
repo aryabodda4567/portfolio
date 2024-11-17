@@ -61,7 +61,8 @@ $(document).ready(function () {
     ],
     typeSpeed: 100,
     backSpeed: 60,
-    loop: true
+    loop: true,
+  
   });
 
   //  Owl Carousel  //
