@@ -108,7 +108,7 @@ $(document).ready(function () {
       alert("Please fill in all the fields.");
       return;
     }
-  const messageFormat = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`
+  const messageFormat = `Name: ${name}\n Email: ${email}\n Subject: ${subject}\n Message: ${message}`
 
   window.location.href="https://wa.me/919966509079/?text="+messageFormat;
 
