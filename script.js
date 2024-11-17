@@ -95,3 +95,35 @@ $(document).ready(function () {
   function openProject(url) {
     window.open(url, '_blank');
   }
+
+  document.getElementById('submit').addEventListener('click', function () {
+    // Collecting form data
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject').value.trim();
+    const message = document.getElementById('message').value.trim();
+  
+    // Validating that all fields are filled
+    if (!name || !email || !subject || !message) {
+      alert("Please fill in all the fields.");
+      return;
+    }
+  const messageFormat = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`
+
+  window.location.href="https://wa.me/919966509079/?text="+messageFormat;
+
+    // Displaying the collected data (or you can send it to a server)
+    console.log("Name:", name);
+    console.log("Email:", email);
+    console.log("Subject:", subject);
+    console.log("Message:", message);
+  
+    // Optionally, clear the form after submission
+    document.getElementById('name').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('subject').value = '';
+    document.getElementById('message').value = '';
+  
+    // alert("Message sent successfully!");
+  });
+  
