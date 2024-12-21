@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     { name: "Blockchain", level: "45%" },
     {name: "Python",level:"75%"},
     {name:"Database managemet system (SQL)",level:"75"},
-    {name:"Data strucutres",level:"77"},
+    {name:"Data strucutres",level:"75"},
     {name:"Node js (Express Js)",level:"65"},
     {name:"System design",level:"50%"},
 
