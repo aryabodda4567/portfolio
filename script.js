@@ -5,15 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
     { name: "Spring Boot", level: "70%" },
     { name: "Android Development", level: "40%" },
     { name: "Blockchain", level: "45%" },
-    {name: "Python",level:"75%"},
-    {name:"Database managemet system (SQL)",level:"75"},
-    {name:"Data strucutres",level:"75"},
-    {name:"Node js (Express Js)",level:"65"},
-    {name:"System design",level:"50%"},
-
-
-
+    { name: "Python", level: "75%" },
+    { name: "Database Management System (SQL)", level: "75%" },
+    { name: "Data Structures", level: "75%" },
+    { name: "Node.js (Express.js)", level: "65%" },
+    { name: "System Design", level: "50%" }
   ];
+  
 
   // Data for projects
   const projects = [
