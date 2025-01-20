@@ -18,35 +18,48 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       title: "HRM Tool",
       description: "An HRM tool built with Spring Boot and SQL for efficient employee management.",
+      link: "https://github.com/aryabodda4567/HRM_Tool"
     },
     {
       title: "Crypto Transaction Tracker",
       description: "Visualizes Ethereum transactions in real-time using Neo4j and Cytoscape.js.",
+      link: "https://github.com/aryabodda4567/crypto-tracker"
     },
     {
       title: "Community Impact Platform",
       description: "Social service platform developed using Android and Firebase.",
+      link: "https://github.com/aryabodda4567/Offering-hands"
     },
     {
       title: "Ethereum Wallet",
       description: "A secure wallet for Ethereum transactions using Web3J and Java.",
+      link: "https://github.com/aryabodda4567/Etherium-Wallet-App"
     },
     {
       title: "Quiz App",
       description: "Interactive quiz application built with Node.js and web technologies.",
+      link: "https://github.com/aryabodda4567/nodejs-quiz-app"
     },
     {
       title: "Remote Mobile Control",
       description: "Enables remote control of mobile devices using Python and WebSockets.",
+      link: "https://github.com/aryabodda4567/WebSocketMobileLink"
     },
     {
-      "title": "RAG Application",
-      "description": "Built with Java Spring Boot and Ollama to generate dynamic SQL queries and fetch data based on natural language queries."
+      title: "RAG Application",
+      description: "Built with Java Spring Boot and Ollama to generate dynamic SQL queries and fetch data based on natural language queries.",
+      link: "https://github.com/aryabodda4567/RAG"
     },
     {
-      "title": "LLM Agents Team for Financial Advice",
-      "description": "Designed a team of LLM agents to provide financial suggestions, such as stock recommendations, developed with the Phidata framework and Python."
+      title: "LLM Agents Team for Financial Advice",
+      description: "Designed a team of LLM agents to provide financial suggestions, such as stock recommendations, developed with the Phidata framework and Python.",
+      link: "https://github.com/aryabodda4567/LLMOS"
     },    
+    {
+      title: "Backend Developer - Easy Marriage (Startup)",
+      description: "Developed secure authentication systems and optimized listing features to enhance platform functionality and scalability",
+      link: null
+    }
     
   ];
 
@@ -70,10 +83,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const projectCard = document.createElement("div");
     projectCard.classList.add("project-card");
 
+    if(project.link!=null){
     projectCard.innerHTML = `
+    <a href='${project.link}' target='_blank'>
       <h4>${project.title}</h4>
       <p>${project.description}</p>
+      
+    </a>  
     `;
+    }
+    else{
+      projectCard.innerHTML = `
+      
+        <h4>${project.title}</h4>
+        <p>${project.description}</p>
+        
+       
+      `;
+    }
 
     projectsContainer.appendChild(projectCard);
   });
