@@ -59,7 +59,12 @@ document.addEventListener("DOMContentLoaded", function () {
       title: "Backend Developer - Easy Marriage (Startup)",
       description: "Developed secure authentication systems and optimized listing features to enhance platform functionality and scalability",
       link: null
-    }
+    },
+{
+	title: "Ai based Chess Game",
+	description: "A Chess app developed in Java and integrated with Llama3.2, running locally using Ollama. Designed for AI vs AI gameplay, it can be modified for PvP or player vs AI modes.",
+  link: "https://github.com/aryabodda4567/Chess-AI"
+},
     
   ];
 
