@@ -178,3 +178,8 @@ footer a:hover {
     width: 100%; /* Full width for mobile */
   }
 }
+a{
+
+  text-decoration: none; 
+  color: inherit;
+}
