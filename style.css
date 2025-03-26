@@ -59,7 +59,7 @@ header {
 header h1 {
   margin: 0;
   color: var(--primary-color);
-  font-size: 2.2em;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
   text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
   transition: var(--transition);
   font-weight: 700;
@@ -102,7 +102,7 @@ nav ul li a {
   text-decoration: none;
   color: var(--text-color);
   font-weight: 500;
-  font-size: 1.1em;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
   position: relative;
   padding: 5px 0;
   transition: var(--transition);
@@ -149,7 +149,7 @@ nav ul li a:hover {
 
 .hero h2 {
   color: var(--text-color);
-  font-size: 4.2em;
+  font-size: clamp(2rem, 5vw, 4.2rem);
   margin-bottom: 20px;
   opacity: 0;
   transform: translateY(20px);
@@ -161,7 +161,7 @@ nav ul li a:hover {
 
 .hero h3 {
   color: var(--text-color);
-  font-size: 1.8em;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
   margin-bottom: 30px;
   opacity: 0;
   transform: translateY(20px);
@@ -172,13 +172,13 @@ nav ul li a:hover {
 
 .btn {
   display: inline-block;
-  padding: 15px 30px;
+  padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 2vw, 2rem);
   background: transparent;
   color: var(--primary-color);
   border: 2px solid var(--primary-color);
   border-radius: 5px;
   text-decoration: none;
-  font-size: 1.2em;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
   font-weight: 500;
   transition: var(--transition);
   position: relative;
@@ -196,7 +196,7 @@ nav ul li a:hover {
 }
 
 .section {
-  padding: 100px 20px;
+  padding: clamp(3rem, 5vw, 6rem) 20px;
   text-align: center;
 }
 
@@ -207,8 +207,8 @@ nav ul li a:hover {
 .projects, .skills {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 60px 40px;
-  padding: 80px 20px;
+  gap: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2.5rem);
+  padding: clamp(2rem, 4vw, 5rem) 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -217,7 +217,7 @@ nav ul li a:hover {
   background: var(--card-bg);
   border: 1px solid rgba(0, 255, 157, 0.1);
   border-radius: 15px;
-  padding: 30px;
+  padding: clamp(1.5rem, 2vw, 2rem);
   text-align: left;
   transition: var(--transition);
   position: relative;
@@ -226,7 +226,7 @@ nav ul li a:hover {
   height: 100%;
   display: flex;
   flex-direction: column;
-  margin: 15px 0;
+  margin: clamp(0.5rem, 1vw, 1rem) 0;
 }
 
 .project-card a {
@@ -265,7 +265,7 @@ nav ul li a:hover {
 .project-card h4 {
   color: var(--primary-color);
   margin-bottom: 15px;
-  font-size: 1.5em;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
   transition: var(--transition);
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -276,7 +276,7 @@ nav ul li a:hover {
 }
 
 .project-card p {
-  font-size: 1.1em;
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
   color: var(--text-color);
   line-height: 1.7;
   margin-bottom: 20px;
@@ -328,7 +328,7 @@ nav ul li a:hover {
 .skill-category h3 {
   color: var(--primary-color);
   margin-bottom: 30px;
-  font-size: 2.2em;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
   text-align: center;
   position: relative;
   padding-bottom: 15px;
@@ -351,8 +351,8 @@ nav ul li a:hover {
 .skill-items {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 25px;
-  padding: 20px 0;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(1rem, 2vw, 1.5rem) 0;
   width: 100%;
   box-sizing: border-box;
 }
@@ -361,7 +361,7 @@ nav ul li a:hover {
   background: rgba(0, 255, 157, 0.05);
   border: 1px solid rgba(0, 255, 157, 0.1);
   border-radius: 12px;
-  padding: 20px;
+  padding: clamp(1rem, 1.5vw, 1.5rem);
   transition: var(--transition);
   position: relative;
   overflow: hidden;
@@ -394,7 +394,7 @@ nav ul li a:hover {
 .skill-card h4 {
   color: var(--text-color);
   margin-bottom: 15px;
-  font-size: 1.2em;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -640,4 +640,90 @@ footer a:hover {
 a{
   text-decoration: none; 
   color: inherit;
+}
+
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
+  padding: 0 20px;
+}
+
+.about-content p {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  line-height: 1.8;
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  color: var(--text-color);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.about-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Media Query for Desktop */
+@media (min-width: 1024px) {
+  .about-content {
+    max-width: 900px;
+  }
+}
+
+/* Media Query for smaller screens (Mobile View) */
+@media (max-width: 768px) {
+  .about-content {
+    padding: 0 15px;
+  }
+}
+
+.about-titles {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 0 20px;
+}
+
+.title-tag {
+  background: rgba(0, 255, 157, 0.1);
+  color: var(--primary-color);
+  padding: 0.5rem 1.5rem;
+  border-radius: 25px;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(0, 255, 157, 0.2);
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title-tag:hover {
+  transform: translateY(-2px);
+  background: rgba(0, 255, 157, 0.15);
+  box-shadow: 0 5px 15px rgba(0, 255, 157, 0.2);
+}
+
+.title-tag::before {
+  content: '•';
+  color: var(--primary-color);
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+/* Media Query for smaller screens (Mobile View) */
+@media (max-width: 768px) {
+  .about-titles {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .title-tag {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
 }
