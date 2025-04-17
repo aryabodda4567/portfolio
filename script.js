@@ -71,7 +71,8 @@ document.addEventListener("DOMContentLoaded", function () {
         { name: "JavaScript", level: 85 },
         { name: "HTML/CSS", level: 90 },
         { name: "PHP", level: 75 },
-        { name: "C", level: 80 }
+        { name: "C", level: 80 },
+        { name: "Shell Script"}
       ]
     },
     {
@@ -104,7 +105,8 @@ document.addEventListener("DOMContentLoaded", function () {
         { name: "Git", level: 90 },
         { name: "Postman", level: 85 },
         { name: "IntelliJ", level: 90 },
-        { name: "Android Studio", level: 85 }
+        { name: "Android Studio", level: 85 },
+        { name: "Linux OS", level: 70}
       ]
     },
     {
