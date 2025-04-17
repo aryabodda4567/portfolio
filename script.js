@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
         { name: "HTML/CSS", level: 90 },
         { name: "PHP", level: 75 },
         { name: "C", level: 80 },
-        { name: "Shell Script",leve: 70}
+        { name: "Shell Script",level: 70}
       ]
     },
     {
