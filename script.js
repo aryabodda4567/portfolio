@@ -173,6 +173,12 @@ document.addEventListener("DOMContentLoaded", function () {
       description: "A Chess app developed in Java and integrated with Llama3.2, running locally using Ollama. Designed for AI vs AI gameplay, it can be modified for PvP or player vs AI modes.",
       link: "https://github.com/aryabodda4567/Chess-AI",
       technologies: ["Java", "Llama", "Ollama", "AI", "Chess"]
+    },
+      {
+      title: "OS-AI Assistant",
+      description: "A powerful AI agent system for Linux that integrates multiple specialized agents for shell commands, web scraping, YouTube, finance data, and file operations using the Phidata framework and Groq API.",
+      link: "https://github.com/aryabodda4567/os-ai",
+      technologies: ["Python", "Phidata", "Groq", "Linux", "AI"]
     }
   ];
 
