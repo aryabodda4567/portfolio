@@ -19,12 +19,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
-    
+
     if (currentScroll <= 0) {
       header.classList.remove('scroll-up');
       return;
     }
-    
+
     if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
       // Scroll Down
       header.classList.remove('scroll-up');
@@ -48,7 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('fade-in');
-        observer.unobserve(entry.target);
+        // Don't unobserve to allow for 3D animations to work with scroll
+        // observer.unobserve(entry.target);
       }
     });
   }, observerOptions);
@@ -104,7 +105,9 @@ document.addEventListener("DOMContentLoaded", function () {
         { name: "Git", level: 90 },
         { name: "Postman", level: 85 },
         { name: "IntelliJ", level: 90 },
-        { name: "Android Studio", level: 85 }
+        { name: "Android Studio", level: 85 },
+        { name: "Linux", level: 80 }
+
       ]
     },
     {
@@ -166,13 +169,19 @@ document.addEventListener("DOMContentLoaded", function () {
       description: "Designed a team of LLM agents to provide financial suggestions, such as stock recommendations, developed with the Phidata framework and Python.",
       link: "https://github.com/aryabodda4567/LLMOS",
       technologies: ["Python", "LLM", "Phidata", "AI", "Finance"]
-    },    
-    
+    },
+
     {
       title: "Ai based Chess Game",
       description: "A Chess app developed in Java and integrated with Llama3.2, running locally using Ollama. Designed for AI vs AI gameplay, it can be modified for PvP or player vs AI modes.",
       link: "https://github.com/aryabodda4567/Chess-AI",
       technologies: ["Java", "Llama", "Ollama", "AI", "Chess"]
+    },
+    {
+      title: "OS-AI Assistant",
+      description: "A powerful AI agent system for Linux that integrates multiple specialized agents for shell commands, web scraping, YouTube, finance data, and file operations using the Phidata framework and Groq API.",
+      link: "https://github.com/aryabodda4567/os-ai",
+      technologies: ["Python", "Phidata", "Groq", "Linux", "AI"]
     }
   ];
 
@@ -181,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
   skills.forEach(category => {
     const categorySection = document.createElement('div');
     categorySection.className = 'skill-category fade-in-section';
-    
+
     categorySection.innerHTML = `
       <h3>${category.category}</h3>
       <div class="skill-items">
@@ -195,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
         `).join('')}
       </div>
     `;
-    
+
     skillsContainer.appendChild(categorySection);
     observer.observe(categorySection);
   });
@@ -205,7 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
   projects.forEach(project => {
     const projectCard = document.createElement('div');
     projectCard.className = 'project-card fade-in-section';
-    
+
     let projectContent = `
       <h4>${project.title}</h4>
       <p>${project.description}</p>
@@ -224,18 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
       projectCard.innerHTML = projectContent;
     }
 
-    // Add hover effect for non-link projects
-    if (!project.link) {
-      projectCard.addEventListener('mouseenter', () => {
-        projectCard.style.transform = 'translateY(-10px)';
-        projectCard.style.boxShadow = '0 10px 30px rgba(0, 255, 157, 0.2)';
-      });
-
-      projectCard.addEventListener('mouseleave', () => {
-        projectCard.style.transform = 'translateY(0)';
-        projectCard.style.boxShadow = 'none';
-      });
-    }
+    // We'll handle hover effects in 3d-animations.js
 
     projectsContainer.appendChild(projectCard);
     observer.observe(projectCard);
@@ -258,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
     link.addEventListener('mouseenter', () => {
       link.style.transform = 'translateY(-5px)';
     });
-    
+
     link.addEventListener('mouseleave', () => {
       link.style.transform = 'translateY(0)';
     });
