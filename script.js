@@ -274,13 +274,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Close menu when clicking a link
-  document.querySelectorAll('.nav-menu a').forEach(link => {
-    link.addEventListener('click', () => {
-      menuToggle.classList.remove('active');
-      navMenu.classList.remove('active');
-      body.style.overflow = '';
-    });
-  });
+  // document.querySelectorAll('.nav-menu a').forEach(link => {
+  //   link.addEventListener('click', () => {
+  //     menuToggle.classList.remove('active');
+  //     navMenu.classList.remove('active');
+  //     body.style.overflow = '';
+  //   });
+  // });
 
   // Close menu when clicking outside
   document.addEventListener('click', (e) => {
