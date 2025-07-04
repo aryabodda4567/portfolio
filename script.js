@@ -26,11 +26,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
-      // Scroll Down
       header.classList.remove('scroll-up');
       header.classList.add('scroll-down');
     } else if (currentScroll < lastScroll && header.classList.contains('scroll-down')) {
-      // Scroll Up
       header.classList.remove('scroll-down');
       header.classList.add('scroll-up');
     }
@@ -48,8 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('fade-in');
-        // Don't unobserve to allow for 3D animations to work with scroll
-        // observer.unobserve(entry.target);
       }
     });
   }, observerOptions);
@@ -107,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
         { name: "IntelliJ", level: 90 },
         { name: "Android Studio", level: 85 },
         { name: "Linux", level: 80 }
-
       ]
     },
     {
@@ -125,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       title: "HRM Tool",
       description: "An HRM tool built with Spring Boot and SQL for efficient employee management.",
-      link: "https://github.com/aryabodda4567/HRM_Tool",
+      link: "https://github.com/aryabodda4567/HRM-Tool",
       technologies: ["Spring Boot", "Java", "SQL", "MySQL"]
     },
     {
@@ -170,7 +165,6 @@ document.addEventListener("DOMContentLoaded", function () {
       link: "https://github.com/aryabodda4567/LLMOS",
       technologies: ["Python", "LLM", "Phidata", "AI", "Finance"]
     },
-
     {
       title: "Ai based Chess Game",
       description: "A Chess app developed in Java and integrated with Llama3.2, running locally using Ollama. Designed for AI vs AI gameplay, it can be modified for PvP or player vs AI modes.",
@@ -233,8 +227,6 @@ document.addEventListener("DOMContentLoaded", function () {
       projectCard.innerHTML = projectContent;
     }
 
-    // We'll handle hover effects in 3d-animations.js
-
     projectsContainer.appendChild(projectCard);
     observer.observe(projectCard);
   });
@@ -243,11 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const scrollIndicator = document.querySelector('.scroll-indicator');
   if (scrollIndicator) {
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 100) {
-        scrollIndicator.style.opacity = '0';
-      } else {
-        scrollIndicator.style.opacity = '1';
-      }
+      scrollIndicator.style.opacity = window.scrollY > 100 ? '0' : '1';
     });
   }
 
@@ -256,7 +244,6 @@ document.addEventListener("DOMContentLoaded", function () {
     link.addEventListener('mouseenter', () => {
       link.style.transform = 'translateY(-5px)';
     });
-
     link.addEventListener('mouseleave', () => {
       link.style.transform = 'translateY(0)';
     });
@@ -273,25 +260,16 @@ document.addEventListener("DOMContentLoaded", function () {
     body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
   });
 
-  // Close menu when clicking a link
-  // document.querySelectorAll('.nav-menu a').forEach(link => {
-  //   link.addEventListener('click', () => {
-  //     menuToggle.classList.remove('active');
-  //     navMenu.classList.remove('active');
-  //     body.style.overflow = '';
-  //   });
-  // });
-
-  // Close menu when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!navMenu.contains(e.target) && !menuToggle.contains(e.target) && navMenu.classList.contains('active')) {
+  // Close menu when a link is clicked
+  navMenu.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') {
       menuToggle.classList.remove('active');
       navMenu.classList.remove('active');
       body.style.overflow = '';
     }
   });
 
-  // Close menu on window resize if open
+  // Close menu on window resize
   window.addEventListener('resize', () => {
     if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
       menuToggle.classList.remove('active');
