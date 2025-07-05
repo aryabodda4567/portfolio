@@ -712,11 +712,11 @@ header, .section, footer {
   .nav-menu {
     position: fixed;
     top: 0;
-    right: -100%;
+    right: 100%;
     width: 80%;
-    max-width: 300px;
-    height: 100vh;
-    background: rgba(10, 25, 47, 0.98);
+    max-width: 280px;
+    height: 50vh;
+    background: rgba(64, 96, 145, 0.98);
     backdrop-filter: blur(10px);
     transition: var(--transition);
     overflow-y: auto;
@@ -769,16 +769,18 @@ header, .section, footer {
 
   /* Add overlay when menu is active */
   .nav-menu.active::before {
-    content: '';
+    
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    z-index: -1;
+    backdrop-filter: blur(15px);
+    z-index: 0;
   }
+
+  
 
   .skills {
     gap: 40px;
