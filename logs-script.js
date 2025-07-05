@@ -15,34 +15,45 @@ async function getIpAddresses() {
   return { publicIp };
 }
 
- async function getGeoLocation(ip) {
+async function getGeoLocation(ip) {
   if (!ip || ip === '::1' || ip === '127.0.0.1') {
     console.log(`Skipping Geo-IP lookup for private/localhost IP: ${ip}`);
     return null;
   }
-
-  const key = "ec32d8dd8fa20f";
+  const Key ="ec32d8dd8fa20f";
   const apiUrl = `https://ipinfo.io/${ip}?token=${key}`;
 
   try {
-    const response = await fetch(apiUrl);
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    } );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const data = await response.json();
-    const [lat, lon] = data.loc.split(',');
+    
 
-    return {
-      country: data.country,
-      region: data.region,
-      city: data.city,
-      zip: data.postal,
-      lat,
-      lon,
-      timezone: data.timezone,
-      org: data.org
-    };
+    if (data.status === 'success') {
+      return {
+        country: data.country,
+        countryCode: data.countryCode,
+        region: data.regionName,
+        city: data.city,
+        zip: data.zip,
+        lat: data.lat,
+        lon: data.lon,
+        timezone: data.timezone,
+        isp: data.isp,
+        org: data.org
+      };
+    } else {
+      console.warn('Geo-IP lookup failed:', data);
+      return null;
+    }
   } catch (error) {
     console.error('Error fetching geo location:', error);
     return null;
