@@ -20,7 +20,7 @@ async function getGeoLocation(ip) {
     console.log(`Skipping Geo-IP lookup for private/localhost IP: ${ip}`);
     return null;
   }
-  const Key ="ec32d8dd8fa20f";
+  const key ="ec32d8dd8fa20f";
   const apiUrl = `https://ipinfo.io/${ip}?token=${key}`;
   try {
     const response = await fetch(apiUrl);
