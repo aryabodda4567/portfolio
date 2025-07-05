@@ -37,7 +37,7 @@ async function getGeoLocation(ip) {
     const data = await response.json();
     
 
-    if (data.status === 'success') {
+    
       return {
         country: data.country,
         countryCode: data.countryCode,
@@ -50,10 +50,7 @@ async function getGeoLocation(ip) {
         isp: data.isp,
         org: data.org
       };
-    } else {
-      console.warn('Geo-IP lookup failed:', data);
-      return null;
-    }
+    
   } catch (error) {
     console.error('Error fetching geo location:', error);
     return null;
