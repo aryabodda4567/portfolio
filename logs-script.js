@@ -21,7 +21,7 @@ async function getGeoLocation(ip) {
     return null;
   }
   const Key ="ec32d8dd8fa20f";
-  const apiUrl = `https://ipinfo.io/${ip}?token=${token}`;
+  const apiUrl = `https://ipinfo.io/${ip}?token=${key}`;
   try {
     const response = await fetch(apiUrl);
     if (!response.ok) {
