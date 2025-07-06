@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Logs</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      background-color: #fff;
+      margin: 1rem auto;
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      max-width: 100%;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+    th {
+      background-color: #e5e7eb;
+      text-align: left;
+      padding: 0.75rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    td {
+      padding: 0.75rem;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.9rem;
+    }
+    tr:nth-child(even) {
+      background-color: #f1f5f9;
+    }
+    tr:hover {
+      background-color: #e2e8f0;
+    }
+    .loading-indicator {
+      text-align: center;
+      padding: 2rem;
+      color: #555;
+    }
+    .password-prompt-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      z-index: 1000;
+    }
+    .password-prompt-box {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+      text-align: center;
+      border: 1px solid #e5e7eb;
+    }
+    .password-prompt-box input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+      box-sizing: border-box;
+    }
+    .password-prompt-box button {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .password-prompt-box button:hover {
+      background-color: #2563eb;
+    }
+    .error-message {
+      color: #b91c1c;
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+    }
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #111827;
+    }
+    .stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      background-color: #f3f4f6;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .stat-item {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #374151;
+    }
+    @media (max-width: 640px) {
+      th, td {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+      }
+      .header h1 {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Password Prompt Overlay -->
+  <div id="passwordPromptOverlay" class="password-prompt-overlay">
+    <div class="password-prompt-box">
+      <h1 style="color: #2563eb;font-weight: 600;">Portfolio view logs</h1>
+      <p>Enter password to views logs.</p>
+      <input type="password" id="passwordInput" placeholder="Enter password..." />
+      <div id="passwordError" class="error-message"></div>
+      <button id="submitPasswordBtn">Access</button>
+    </div>
+  </div>
+
+  <div class="container hidden" id="mainContent">
+    <div class="header">
+      <h1>Portfolio Logs</h1>
+    </div>
+    <div id="statsBar" class="stats-bar hidden">
+      <div class="stat-item">Total Entries: <span id="totalEntries">0</span></div>
+      <div class="stat-item">Unique Locations: <span id="uniqueLocations">0</span></div>
+      <div class="stat-item">Last Updated: <span id="lastUpdated">-</span></div>
+    </div>
+    <div id="loading" class="loading-indicator hidden">
+      Fetching data...
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Count</th>
+            <th>Country</th>
+            <th>Region</th>
+            <th>City</th>
+            <th>Postal</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Timezone</th>
+            <th>Organization</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody id="logDataTableBody">
+          <tr>
+            <td colspan="11" class="text-center">No data available</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    // Base API URL (password will be appended dynamically)
+    const BASE_API_URL = 'https://portfolio-server-8f94.onrender.com/api/view-logs';
+
+    // Get DOM elements
+    const passwordPromptOverlay = document.getElementById('passwordPromptOverlay');
+    const passwordInput = document.getElementById('passwordInput');
+    const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+    const passwordError = document.getElementById('passwordError');
+    const mainContent = document.getElementById('mainContent');
+    const tableBody = document.getElementById('logDataTableBody');
+    const loadingIndicator = document.getElementById('loading');
+    const statsBar = document.getElementById('statsBar');
+    const totalEntries = document.getElementById('totalEntries');
+    const uniqueLocations = document.getElementById('uniqueLocations');
+    const lastUpdated = document.getElementById('lastUpdated');
+
+    /**
+     * Groups log data based on location and time window (2-3 minutes).
+     * Entries without timestamps are grouped by location into a single row.
+     * Entries with timestamps are grouped by location and within a 3-minute window.
+     * @param {Array<Object>} data - An array of log entry objects.
+     * @returns {Array<Object>} An array of grouped log entries for display.
+     */
+    function groupLogData(data) {
+      const groupedSessionsByLocation = new Map();
+
+      data.sort((a, b) => {
+        const timeA = a.time ? a.time._seconds : Number.MAX_SAFE_INTEGER;
+        const timeB = b.time ? b.time._seconds : Number.MAX_SAFE_INTEGER;
+        return timeA - timeB;
+      });
+
+      data.forEach(entry => {
+        const locationKey = `${entry.country}-${entry.region}-${entry.city}-${entry.lat}-${entry.lon}`;
+        const entryTimestamp = entry.time ? entry.time._seconds * 1000 : null;
+
+        if (!groupedSessionsByLocation.has(locationKey)) {
+          groupedSessionsByLocation.set(locationKey, { noTimeSession: null, timedSessions: [] });
+        }
+        const locationGroup = groupedSessionsByLocation.get(locationKey);
+
+        if (entryTimestamp === null) {
+          if (locationGroup.noTimeSession === null) {
+            locationGroup.noTimeSession = { ...entry, count: 1 };
+          } else {
+            locationGroup.noTimeSession.count++;
+          }
+        } else {
+          let addedToExistingTimedSession = false;
+          if (locationGroup.timedSessions.length > 0) {
+            const lastSession = locationGroup.timedSessions[locationGroup.timedSessions.length - 1];
+            const THREE_MINUTES_MS = 3 * 60 * 1000;
+            if (entryTimestamp - lastSession.lastTimestamp <= THREE_MINUTES_MS) {
+              lastSession.count++;
+              lastSession.lastTimestamp = entryTimestamp;
+              lastSession.initialEntry.time = { _seconds: Math.floor(entryTimestamp / 1000), _nanoseconds: 0 };
+              addedToExistingTimedSession = true;
+            }
+          }
+
+          if (!addedToExistingTimedSession) {
+            locationGroup.timedSessions.push({
+              initialEntry: { ...entry },
+              lastTimestamp: entryTimestamp,
+              count: 1
+            });
+          }
+        }
+      });
+
+      const finalDisplayData = [];
+      groupedSessionsByLocation.forEach(locationGroup => {
+        if (locationGroup.noTimeSession) {
+          finalDisplayData.push(locationGroup.noTimeSession);
+        }
+        locationGroup.timedSessions.forEach(session => {
+          finalDisplayData.push(session.initialEntry);
+        });
+      });
+
+      finalDisplayData.sort((a, b) => {
+        const locationA = `${a.country}-${a.region}-${a.city}-${a.lat}-${a.lon}`;
+        const locationB = `${b.country}-${b.region}-${b.city}-${b.lat}-${b.lon}`;
+
+        if (locationA !== locationB) {
+          return locationA.localeCompare(locationB);
+        }
+
+        const timeA = a.time ? a.time._seconds : -Infinity;
+        const timeB = b.time ? b.time._seconds : -Infinity;
+        return timeA - timeB;
+      });
+
+      return finalDisplayData;
+    }
+
+    /**
+     * Updates the statistics bar with current data info
+     */
+    function updateStats(data) {
+      const locations = new Set();
+      data.forEach(entry => {
+        locations.add(`${entry.country}-${entry.region}-${entry.city}`);
+      });
+      
+      totalEntries.textContent = data.length;
+      uniqueLocations.textContent = locations.size;
+      lastUpdated.textContent = new Date().toLocaleString();
+      statsBar.classList.remove('hidden');
+    }
+
+    /**
+     * Populates the HTML table with the processed log data.
+     * @param {Array<Object>} data - An array of log entry objects (already grouped).
+     */
+    function populateTable(data) {
+      tableBody.innerHTML = '';
+
+      if (data.length === 0) {
+        const row = document.createElement('tr');
+        const cell = document.createElement('td');
+        cell.colSpan = 11;
+        cell.className = 'text-center text-gray-500 py-8';
+        cell.textContent = 'No log data available.';
+        row.appendChild(cell);
+        tableBody.appendChild(row);
+        return;
+      }
+
+      data.forEach((logEntry, index) => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50 transition-colors duration-200';
+
+        const columns = [
+          'id', 'count', 'country', 'region', 'city', 'postal', 'lat', 'lon', 'timezone', 'org'
+        ];
+
+        columns.forEach(key => {
+          const cell = document.createElement('td');
+          const value = logEntry[key] !== undefined ? logEntry[key] : 'N/A';
+          cell.textContent = value;
+          row.appendChild(cell);
+        });
+
+        // Handle timestamp
+        const timeCell = document.createElement('td');
+        if (logEntry.time && logEntry.time._seconds) {
+          const date = new Date(logEntry.time._seconds * 1000);
+          timeCell.textContent = date.toLocaleString();
+        } else {
+          timeCell.textContent = 'N/A';
+        }
+        row.appendChild(timeCell);
+
+        tableBody.appendChild(row);
+      });
+
+      updateStats(data);
+    }
+
+    /**
+     * Fetches log data from the API, groups it, and populates the table.
+     * @param {string} password - The password to include in the API request.
+     */
+    async function fetchAndDisplayLogData(password) {
+      console.log('Attempting to fetch data with password:', password);
+      passwordPromptOverlay.classList.add('hidden');
+      loadingIndicator.classList.remove('hidden');
+      mainContent.classList.add('hidden');
+
+      try {
+        const API_URL_WITH_PASSWORD = `${BASE_API_URL}?password=${encodeURIComponent(password)}`;
+        const response = await fetch(API_URL_WITH_PASSWORD);
+        console.log('API Response Status:', response.status, 'OK:', response.ok);
+
+        const result = await response.json();
+        console.log('Parsed API Result:', result);
+
+        if (result && result.success === false) {
+          console.error('API returned success: false. Message:', result.message);
+          passwordError.textContent = result.message || 'Incorrect password. Please try again.';
+          passwordInput.value = '';
+          passwordPromptOverlay.classList.remove('hidden');
+        } else if (response.ok) {
+          console.log('API response OK. Processing data...');
+          const logData = result;
+          const processedData = groupLogData(logData);
+          populateTable(processedData);
+          mainContent.classList.remove('hidden');
+          console.log('Data displayed successfully.');
+        } else {
+          const errorMessage = `HTTP error! Status: ${response.status}. Message: ${result.message || 'Unknown error.'}`;
+          console.error('API fetch failed:', errorMessage);
+          throw new Error(errorMessage);
+        }
+      } catch (error) {
+        console.error('Error in fetchAndDisplayLogData:', error);
+        passwordError.textContent = `Error: ${error.message}. Please try again.`;
+        passwordInput.value = '';
+        passwordPromptOverlay.classList.remove('hidden');
+      } finally {
+        loadingIndicator.classList.add('hidden');
+      }
+    }
+
+    // Event listeners
+    submitPasswordBtn.addEventListener('click', () => {
+      const password = passwordInput.value;
+      if (password) {
+        passwordError.textContent = '';
+        fetchAndDisplayLogData(password);
+      } else {
+        passwordError.textContent = 'Please enter a password.';
+      }
+    });
+
+    passwordInput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        submitPasswordBtn.click();
+      }
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      passwordPromptOverlay.classList.remove('hidden');
+      mainContent.classList.add('hidden');
+      loadingIndicator.classList.add('hidden');
+      passwordInput.focus();
+    });
+  </script>
+</body>
+</html>
