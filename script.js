@@ -1,5 +1,4 @@
 // ULTRA SIMPLE VERSION - No dependencies
-console.log("=== SCRIPT.JS LOADED ===");
 
 // Skills Data
 const skillsData = [
@@ -95,11 +94,9 @@ const projectsData = [
 
 // Function to inject skills
 function injectSkills() {
-  console.log("Injecting skills...");
   const container = document.getElementById('skills-container');
 
   if (!container) {
-    console.error("ERROR: skills-container not found!");
     return;
   }
 
@@ -116,16 +113,13 @@ function injectSkills() {
   });
 
   container.innerHTML = html;
-  console.log("✓ Skills injected! Count:", skillsData.length);
 }
 
 // Function to inject projects
 function injectProjects() {
-  console.log("Injecting projects...");
   const container = document.getElementById('projects-container');
 
   if (!container) {
-    console.error("ERROR: projects-container not found!");
     return;
   }
 
@@ -151,19 +145,15 @@ function injectProjects() {
   });
 
   container.innerHTML = html;
-  console.log("✓ Projects injected! Count:", projectsData.length);
 }
 
 // Execute when DOM is ready
 if (document.readyState === 'loading') {
-  console.log("Waiting for DOM...");
   document.addEventListener('DOMContentLoaded', function () {
-    console.log("DOM ready! Injecting content...");
     injectSkills();
     injectProjects();
   });
 } else {
-  console.log("DOM already loaded! Injecting content...");
   injectSkills();
   injectProjects();
 }
@@ -257,5 +247,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
-
-console.log("=== SCRIPT.JS FINISHED LOADING ===");

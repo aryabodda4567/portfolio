@@ -249,5 +249,4 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   animate();
-  console.log("✨ Interactive background initialized with", particleCount, "particles");
 });

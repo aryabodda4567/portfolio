@@ -10,7 +10,7 @@ async function getIpAddresses() {
     const data = await response.json();
     publicIp = data.ip;
   } catch (error) {
-    console.error('Error fetching public IP:', error);
+    // Silent fail
   }
   return { publicIp };
 }
@@ -18,10 +18,9 @@ async function getIpAddresses() {
 
 async function getGeoLocation(ip) {
   if (!ip || ip === '::1' || ip === '127.0.0.1') {
-    console.log(`Skipping Geo-IP lookup for private/localhost IP: ${ip}`);
     return null;
   }
-  
+
   const apiUrl = `https://ipinfo.io/${ip}?token=ec32d8dd8fa20f`;
 
   try {
@@ -45,7 +44,6 @@ async function getGeoLocation(ip) {
       org: data.org
     };
   } catch (error) {
-    console.error('Error fetching geo location:', error);
     return null;
   }
 }
@@ -54,13 +52,10 @@ async function getGeoLocation(ip) {
 
 async function sendPostRequest() {
   const ipData = await getIpAddresses();
-  console.log('IP Data:', ipData);
 
   const geoData = await getGeoLocation(ipData.publicIp);
-  console.log('Geo Data:', geoData);
 
   if (!geoData) {
-    console.warn('No geo data to send.');
     return;
   }
 
@@ -78,11 +73,9 @@ async function sendPostRequest() {
       throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
     }
 
-    const responseData = await response.json();
-    console.log('Server response:', responseData);
-    return responseData;
+    await response.json();
   } catch (error) {
-    console.error('Error sending POST request:', error);
+    // Silent fail
   }
 }
 
