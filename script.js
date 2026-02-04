@@ -1,312 +1,261 @@
-document.addEventListener("DOMContentLoaded", function () {
-  // Smooth scrolling for navigation links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    });
+// ULTRA SIMPLE VERSION - No dependencies
+console.log("=== SCRIPT.JS LOADED ===");
+
+// Skills Data
+const skillsData = [
+  {
+    category: "Core Intelligence",
+    skills: ["Java", "Python", "C++", "Data Structures", "System Design", "SQL", "C"]
+  },
+  {
+    category: "Web Engineering",
+    skills: ["React.js", "Node.js", "Spring Boot", "Three.js", "Express.js", "PHP"]
+  },
+  {
+    category: "Mobile & Platforms",
+    skills: ["Android SDK", "Firebase", "Linux"]
+  },
+  {
+    category: "Decentralized Systems",
+    skills: ["Solidity", "Ethereum", "Smart Contracts", "Web3.js", "Solana"]
+  },
+  {
+    category: "AI & Agents",
+    skills: ["LLMs", "RAG Systems", "Phidata", "Ollama", "Groq API"]
+  },
+  {
+    category: "Infrastructure",
+    skills: ["AWS", "Docker", "Neo4j", "Git", "Hibernate"]
+  }
+];
+
+// Projects Data
+const projectsData = [
+  {
+    title: "OS-AI Assistant",
+    desc: "A powerful operating system agent tailored for Linux. Integrates multiple specialized autonomous agents for shell command execution, web scraping, and file system operations using Groq & Phidata.",
+    link: "https://github.com/aryabodda4567/os-ai",
+    tech: ["Python", "Groq API", "Phidata"]
+  },
+  {
+    title: "Chess AI: Grandmaster Logic",
+    desc: "An advanced competitive chess engine running locally via Llama 3.2. Blends traditional minimax algorithms with LLM-based strategic evaluation for dynamic gameplay.",
+    link: "https://github.com/aryabodda4567/Chess-AI",
+    tech: ["Java", "Llama 3.2", "Ollama"]
+  },
+  {
+    title: "Financial Agent Swarm",
+    desc: "A multi-agent team designed to analyze market trends. Orchestrates distinct agents for news analysis, stock data, and risk assessment to provide holistic financial advice.",
+    link: "https://github.com/aryabodda4567/LLMOS",
+    tech: ["Python", "Phidata", "Finance API"]
+  },
+  {
+    title: "RAG Knowledge Engine",
+    desc: "Retrieval-Augmented Generation system converting natural language into complex SQL queries. Empowers non-technical users to extract deep insights from databases instantly.",
+    link: "https://github.com/aryabodda4567/RAG",
+    tech: ["Java", "Spring Boot", "Ollama"]
+  },
+  {
+    title: "Crypto Visualizer",
+    desc: "Real-time Ethereum transaction tracker using Graph Databases. Visualizes flow of funds between wallets to detect patterns and money laundering risks.",
+    link: "https://github.com/aryabodda4567/crypto-tracker",
+    tech: ["Neo4j", "Cytoscape.js", "Ethereum"]
+  },
+  {
+    title: "Secure Ethereum Wallet",
+    desc: "A non-custodial blockchain wallet interface. Enables secure signing, transaction management, and balance tracking directly on the Ethereum mainnet.",
+    link: "https://github.com/aryabodda4567/Etherium-Wallet-App",
+    tech: ["Java", "Web3j", "Blockchain"]
+  },
+  {
+    title: "Enterprise HRM Suite",
+    desc: "Comprehensive Human Resource Management tool built for scale. Features employee tracking, payroll management, and performance analytics with robust role-based access control.",
+    link: "https://github.com/aryabodda4567/HRM_Tool",
+    tech: ["Spring Boot", "MySQL", "Hibernate"]
+  },
+  {
+    title: "Community Impact Platform",
+    desc: "A social service application connecting volunteers with donation drives. Features real-time geo-location, chat, and event coordination.",
+    link: "https://github.com/aryabodda4567/Offering-hands",
+    tech: ["Android SDK", "Firebase", "Java"]
+  },
+  {
+    title: "Remote Device Controller",
+    desc: "IoT bridge enabling remote control of mobile devices via web sockets. Allows command execution and screen mirroring with low latency.",
+    link: "https://github.com/aryabodda4567/WebSocketMobileLink",
+    tech: ["Python", "WebSocket", "Automation"]
+  },
+  {
+    title: "Interactive Quiz Engine",
+    desc: "Gamified learning platform with real-time scoreboards and dynamic question banks. Scalable architecture to handle concurrent user sessions.",
+    link: "https://github.com/aryabodda4567/nodejs-quiz-app",
+    tech: ["Node.js", "Express", "MongoDB"]
+  }
+];
+
+// Function to inject skills
+function injectSkills() {
+  console.log("Injecting skills...");
+  const container = document.getElementById('skills-container');
+
+  if (!container) {
+    console.error("ERROR: skills-container not found!");
+    return;
+  }
+
+  let html = '';
+  skillsData.forEach(category => {
+    html += `
+            <div class="skill-category glass-card">
+                <h3>${category.category}</h3>
+                <div class="skill-tags">
+                    ${category.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                </div>
+            </div>
+        `;
   });
+
+  container.innerHTML = html;
+  console.log("✓ Skills injected! Count:", skillsData.length);
+}
+
+// Function to inject projects
+function injectProjects() {
+  console.log("Injecting projects...");
+  const container = document.getElementById('projects-container');
+
+  if (!container) {
+    console.error("ERROR: projects-container not found!");
+    return;
+  }
+
+  let html = '';
+  projectsData.forEach(project => {
+    html += `
+            <div class="project-wrapper">
+                <a href="${project.link}" target="_blank" class="project-card glass-card">
+                    <div class="project-header">
+                        <i class="fas fa-folder folder-icon"></i>
+                        <div class="external-links">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </div>
+                    <h3 class="project-title">${project.title}</h3>
+                    <p class="project-desc">${project.desc}</p>
+                    <div class="project-tech">
+                        ${project.tech.map(tech => `<span>${tech}</span>`).join('')}
+                    </div>
+                </a>
+            </div>
+        `;
+  });
+
+  container.innerHTML = html;
+  console.log("✓ Projects injected! Count:", projectsData.length);
+}
+
+// Execute when DOM is ready
+if (document.readyState === 'loading') {
+  console.log("Waiting for DOM...");
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log("DOM ready! Injecting content...");
+    injectSkills();
+    injectProjects();
+  });
+} else {
+  console.log("DOM already loaded! Injecting content...");
+  injectSkills();
+  injectProjects();
+}
+
+// Mobile menu toggle
+document.addEventListener('DOMContentLoaded', function () {
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navMenu = document.querySelector('.nav-menu');
+
+  if (menuToggle && navMenu) {
+    menuToggle.addEventListener('click', function () {
+      navMenu.classList.toggle('active');
+    });
+  }
 
   // Header scroll effect
-  const header = document.querySelector('header');
-  let lastScroll = 0;
-
-  window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll <= 0) {
-      header.classList.remove('scroll-up');
-      return;
-    }
-    
-    if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
-      // Scroll Down
-      header.classList.remove('scroll-up');
-      header.classList.add('scroll-down');
-    } else if (currentScroll < lastScroll && header.classList.contains('scroll-down')) {
-      // Scroll Up
-      header.classList.remove('scroll-down');
-      header.classList.add('scroll-up');
-    }
-    lastScroll = currentScroll;
-  });
-
-  // Intersection Observer for fade-in animations
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('fade-in');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
-
-  // Observe all sections
-  document.querySelectorAll('.section').forEach(section => {
-    section.classList.add('fade-in-section');
-    observer.observe(section);
-  });
-
-  // Skills data
-  const skills = [
-    {
-      category: "Programming Languages",
-      items: [
-        { name: "Java", level: 90 },
-        { name: "Python", level: 85 },
-        { name: "SQL", level: 85 },
-        { name: "C++", level: 80 },
-        { name: "JavaScript", level: 85 },
-        { name: "HTML/CSS", level: 90 },
-        { name: "PHP", level: 75 },
-        { name: "C", level: 80 },
-        { name: "Shell Script",level: 70}
-      ]
-    },
-    {
-      category: "Frameworks & Libraries",
-      items: [
-        { name: "Spring Boot", level: 85 },
-        { name: "Node.js", level: 80 },
-        { name: "Express.js", level: 80 },
-        { name: "Hibernate", level: 75 },
-        { name: "Android SDK", level: 80 },
-        { name: "Web3.js", level: 75 },
-        { name: "Solana Web3.js", level: 70 }
-      ]
-    },
-    {
-      category: "Blockchain Technologies",
-      items: [
-        { name: "Ethereum", level: 85 },
-        { name: "Smart Contracts", level: 80 },
-        { name: "Solidity", level: 85 },
-        { name: "Bitquery API", level: 75 }
-      ]
-    },
-    {
-      category: "Tools & Platforms",
-      items: [
-        { name: "AWS (Cloud Practitioner)", level: 80 },
-        { name: "Firebase", level: 85 },
-        { name: "Neo4j", level: 75 },
-        { name: "Git", level: 90 },
-        { name: "Postman", level: 85 },
-        { name: "IntelliJ", level: 90 },
-        { name: "Android Studio", level: 85 },
-        { name: "Linux OS", level: 70}
-      ]
-    },
-    {
-      category: "Analytical Skills",
-      items: [
-        { name: "Data Structures & Algorithms", level: 85 },
-        { name: "System Design", level: 80 },
-        { name: "Financial Analysis", level: 75 }
-      ]
-    }
-  ];
-
-  // Projects data
-  const projects = [
-    {
-      title: "HRM Tool",
-      description: "An HRM tool built with Spring Boot and SQL for efficient employee management.",
-      link: "https://github.com/aryabodda4567/HRM_Tool",
-      technologies: ["Spring Boot", "Java", "SQL", "MySQL"]
-    },
-    {
-      title: "Crypto Transaction Tracker",
-      description: "Visualizes Ethereum transactions in real-time using Neo4j and Cytoscape.js.",
-      link: "https://github.com/aryabodda4567/crypto-tracker",
-      technologies: ["Neo4j", "Cytoscape.js", "JavaScript", "Ethereum"]
-    },
-    {
-      title: "Community Impact Platform",
-      description: "Social service platform developed using Android and Firebase.",
-      link: "https://github.com/aryabodda4567/Offering-hands",
-      technologies: ["Android", "Firebase", "Java", "XML"]
-    },
-    {
-      title: "Ethereum Wallet",
-      description: "A secure wallet for Ethereum transactions using Web3J and Java.",
-      link: "https://github.com/aryabodda4567/Etherium-Wallet-App",
-      technologies: ["Java", "Web3J", "Ethereum", "Blockchain"]
-    },
-    {
-      title: "Quiz App",
-      description: "Interactive quiz application built with Node.js and web technologies.",
-      link: "https://github.com/aryabodda4567/nodejs-quiz-app",
-      technologies: ["Node.js", "Express", "MongoDB", "JavaScript"]
-    },
-    {
-      title: "Remote Mobile Control",
-      description: "Enables remote control of mobile devices using Python and WebSockets.",
-      link: "https://github.com/aryabodda4567/WebSocketMobileLink",
-      technologies: ["Python", "WebSocket", "Android", "Socket.io"]
-    },
-    {
-      title: "RAG Application",
-      description: "Built with Java Spring Boot and Ollama to generate dynamic SQL queries and fetch data based on natural language queries.",
-      link: "https://github.com/aryabodda4567/RAG",
-      technologies: ["Java", "Spring Boot", "Ollama", "SQL", "AI"]
-    },
-    {
-      title: "LLM Agents Team for Financial Advice",
-      description: "Designed a team of LLM agents to provide financial suggestions, such as stock recommendations, developed with the Phidata framework and Python.",
-      link: "https://github.com/aryabodda4567/LLMOS",
-      technologies: ["Python", "LLM", "Phidata", "AI", "Finance"]
-    },    
-    
-    {
-      title: "Ai based Chess Game",
-      description: "A Chess app developed in Java and integrated with Llama3.2, running locally using Ollama. Designed for AI vs AI gameplay, it can be modified for PvP or player vs AI modes.",
-      link: "https://github.com/aryabodda4567/Chess-AI",
-      technologies: ["Java", "Llama", "Ollama", "AI", "Chess"]
-    },
-      {
-      title: "OS-AI Assistant",
-      description: "A powerful AI agent system for Linux that integrates multiple specialized agents for shell commands, web scraping, YouTube, finance data, and file operations using the Phidata framework and Groq API.",
-      link: "https://github.com/aryabodda4567/os-ai",
-      technologies: ["Python", "Phidata", "Groq", "Linux", "AI"]
-    }
-  ];
-
-  // Render skills
-  const skillsContainer = document.querySelector('.skills');
-  skills.forEach(category => {
-    const categorySection = document.createElement('div');
-    categorySection.className = 'skill-category fade-in-section';
-    
-    categorySection.innerHTML = `
-      <h3>${category.category}</h3>
-      <div class="skill-items">
-        ${category.items.map(skill => `
-          <div class="skill-card">
-            <h4>${skill.name}</h4>
-            <div class="skill-bar">
-              <span style="width: ${skill.level}%"></span>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `;
-    
-    skillsContainer.appendChild(categorySection);
-    observer.observe(categorySection);
-  });
-
-  // Render projects
-  const projectsContainer = document.querySelector('.projects');
-  projects.forEach(project => {
-    const projectCard = document.createElement('div');
-    projectCard.className = 'project-card fade-in-section';
-    
-    let projectContent = `
-      <h4>${project.title}</h4>
-      <p>${project.description}</p>
-      <div class="tech-stack">
-        ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
-      </div>
-    `;
-
-    if (project.link) {
-      projectCard.innerHTML = `
-        <a href="${project.link}" target="_blank" rel="noopener noreferrer">
-          ${projectContent}
-        </a>
-      `;
-    } else {
-      projectCard.innerHTML = projectContent;
-    }
-
-    // Add hover effect for non-link projects
-    if (!project.link) {
-      projectCard.addEventListener('mouseenter', () => {
-        projectCard.style.transform = 'translateY(-10px)';
-        projectCard.style.boxShadow = '0 10px 30px rgba(0, 255, 157, 0.2)';
-      });
-
-      projectCard.addEventListener('mouseleave', () => {
-        projectCard.style.transform = 'translateY(0)';
-        projectCard.style.boxShadow = 'none';
-      });
-    }
-
-    projectsContainer.appendChild(projectCard);
-    observer.observe(projectCard);
-  });
-
-  // Scroll indicator animation
-  const scrollIndicator = document.querySelector('.scroll-indicator');
-  if (scrollIndicator) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 100) {
-        scrollIndicator.style.opacity = '0';
+  const header = document.querySelector('.glass-header');
+  if (header) {
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
       } else {
-        scrollIndicator.style.opacity = '1';
+        header.classList.remove('scrolled');
       }
     });
   }
 
-  // Add hover effect to social links
-  document.querySelectorAll('.social-link').forEach(link => {
-    link.addEventListener('mouseenter', () => {
-      link.style.transform = 'translateY(-5px)';
+  // Custom Cursor with Ripple Effect & Smooth Trail
+  const cursorDot = document.querySelector('[data-cursor-dot]');
+  const cursorOutline = document.querySelector('[data-cursor-outline]');
+
+  if (cursorDot && cursorOutline) {
+    let mouseX = 0;
+    let mouseY = 0;
+    let outlineX = 0;
+    let outlineY = 0;
+
+    // Update cursor position
+    document.addEventListener('mousemove', function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      // Instant dot follow
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top = mouseY + 'px';
     });
-    
-    link.addEventListener('mouseleave', () => {
-      link.style.transform = 'translateY(0)';
-    });
-  });
 
-  // Mobile menu toggle
-  const menuToggle = document.querySelector('.menu-toggle');
-  const navMenu = document.querySelector('.nav-menu');
-  const body = document.body;
+    // Smooth outline follow (creates beautiful trail effect)
+    function animateCursor() {
+      // Lerp (linear interpolation) for smooth following
+      outlineX += (mouseX - outlineX) * 0.15;
+      outlineY += (mouseY - outlineY) * 0.15;
 
-  menuToggle.addEventListener('click', () => {
-    menuToggle.classList.toggle('active');
-    navMenu.classList.toggle('active');
-    body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
-  });
+      cursorOutline.style.left = outlineX + 'px';
+      cursorOutline.style.top = outlineY + 'px';
 
-  // Close menu when clicking a link
-  document.querySelectorAll('.nav-menu a').forEach(link => {
-    link.addEventListener('click', () => {
-      menuToggle.classList.remove('active');
-      navMenu.classList.remove('active');
-      body.style.overflow = '';
-    });
-  });
-
-  // Close menu when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!navMenu.contains(e.target) && !menuToggle.contains(e.target) && navMenu.classList.contains('active')) {
-      menuToggle.classList.remove('active');
-      navMenu.classList.remove('active');
-      body.style.overflow = '';
+      requestAnimationFrame(animateCursor);
     }
-  });
+    animateCursor();
 
-  // Close menu on window resize if open
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
-      menuToggle.classList.remove('active');
-      navMenu.classList.remove('active');
-      body.style.overflow = '';
-    }
-  });
+    // Create ripple on click (syncs with background)
+    document.addEventListener('click', function (e) {
+      const ripple = document.createElement('div');
+      ripple.className = 'cursor-ripple';
+      ripple.style.left = e.clientX + 'px';
+      ripple.style.top = e.clientY + 'px';
+      ripple.style.transform = 'translate(-50%, -50%)';
+      document.body.appendChild(ripple);
+
+      // Expand outline on click
+      cursorOutline.classList.add('active');
+      setTimeout(() => {
+        cursorOutline.classList.remove('active');
+      }, 200);
+
+      // Remove ripple after animation completes
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+    });
+
+    // Expand cursor on hover over interactive elements
+    const interactiveElements = document.querySelectorAll('a, button, .project-card, .skill-tag');
+    interactiveElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursorOutline.classList.add('active');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorOutline.classList.remove('active');
+      });
+    });
+  }
 });
+
+console.log("=== SCRIPT.JS FINISHED LOADING ===");
