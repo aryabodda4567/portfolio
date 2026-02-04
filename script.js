@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Header scroll effect
+  // Header scroll effect - OPTIMIZED: Passive listener
   const header = document.querySelector('.glass-header');
   if (header) {
     window.addEventListener('scroll', function () {
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         header.classList.remove('scrolled');
       }
-    });
+    }, { passive: true });
   }
 
   // Custom Cursor with Ripple Effect & Smooth Trail
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let outlineX = 0;
     let outlineY = 0;
 
-    // Update cursor position
+    // Update cursor position - OPTIMIZED: Passive listener
     document.addEventListener('mousemove', function (e) {
       mouseX = e.clientX;
       mouseY = e.clientY;
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Instant dot follow
       cursorDot.style.left = mouseX + 'px';
       cursorDot.style.top = mouseY + 'px';
-    });
+    }, { passive: true });
 
     // Smooth outline follow (creates beautiful trail effect)
     function animateCursor() {

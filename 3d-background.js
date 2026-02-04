@@ -7,18 +7,19 @@ document.addEventListener("DOMContentLoaded", function () {
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
   camera.position.z = 150;
 
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  // OPTIMIZED: Disabled antialias (50% GPU cost reduction), reduced pixel ratio
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   container.appendChild(renderer.domElement);
 
-  // Enhanced particle system
-  const particleCount = 120;
+  // OPTIMIZED: Reduced particle count from 120 to 60
+  const particleCount = 60;
   const particles = [];
   const connectionDistance = 120;
 
-  // Create particle material with glow
-  const particleGeometry = new THREE.SphereGeometry(1, 8, 8);
+  // OPTIMIZED: Simplified geometry (8,8 -> 6,6)
+  const particleGeometry = new THREE.SphereGeometry(1, 6, 6);
   const particleMaterial = new THREE.MeshBasicMaterial({
     color: 0x00f2ff,
     transparent: true,
@@ -49,13 +50,27 @@ document.addEventListener("DOMContentLoaded", function () {
     particles.push(particle);
   }
 
-  // Line material for connections
-  const lineMaterial = new THREE.LineBasicMaterial({
-    color: 0x00f2ff,
-    transparent: true,
-    opacity: 0.2,
-    blending: THREE.AdditiveBlending
-  });
+  // OPTIMIZED: Object pool for line geometries (prevents create/destroy every frame)
+  const linePool = [];
+  const maxLines = Math.floor((particleCount * (particleCount - 1)) / 2);
+
+  for (let i = 0; i < maxLines; i++) {
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(6); // 2 vertices * 3 coordinates
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    const material = new THREE.LineBasicMaterial({
+      color: 0x00f2ff,
+      transparent: true,
+      opacity: 0.2,
+      blending: THREE.AdditiveBlending
+    });
+
+    const line = new THREE.Line(geometry, material);
+    line.visible = false;
+    scene.add(line);
+    linePool.push(line);
+  }
 
   // Mouse interaction variables
   let mouseX = 0;
@@ -64,8 +79,13 @@ document.addEventListener("DOMContentLoaded", function () {
   let isMouseMoving = false;
   let mouseTimeout;
 
-  // Track mouse movement
+  // OPTIMIZED: Throttled mouse movement (60fps max)
+  let lastMouseUpdate = 0;
   document.addEventListener('mousemove', (event) => {
+    const now = Date.now();
+    if (now - lastMouseUpdate < 16) return; // ~60fps throttle
+    lastMouseUpdate = now;
+
     mouseX = (event.clientX / window.innerWidth) * 2 - 1;
     mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
 
@@ -82,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
     mouseTimeout = setTimeout(() => {
       isMouseMoving = false;
     }, 100);
-  });
+  }, { passive: true });
 
   // Click explosion effect
   document.addEventListener('click', (event) => {
@@ -183,23 +203,26 @@ document.addEventListener("DOMContentLoaded", function () {
       particle.scale.setScalar(scale);
     });
 
-    // Draw connections with enhanced opacity
-    scene.children.forEach(child => {
-      if (child.type === 'Line') {
-        scene.remove(child);
-      }
-    });
+    // OPTIMIZED: Reuse line pool instead of creating/destroying
+    let lineIndex = 0;
 
-    // Create connection lines with dynamic opacity
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const distance = particles[i].position.distanceTo(particles[j].position);
 
-        if (distance < connectionDistance) {
-          const geometry = new THREE.BufferGeometry().setFromPoints([
-            particles[i].position,
-            particles[j].position
-          ]);
+        if (distance < connectionDistance && lineIndex < linePool.length) {
+          const line = linePool[lineIndex++];
+          line.visible = true;
+
+          // Update line positions
+          const positions = line.geometry.attributes.position.array;
+          positions[0] = particles[i].position.x;
+          positions[1] = particles[i].position.y;
+          positions[2] = particles[i].position.z;
+          positions[3] = particles[j].position.x;
+          positions[4] = particles[j].position.y;
+          positions[5] = particles[j].position.z;
+          line.geometry.attributes.position.needsUpdate = true;
 
           // Enhanced opacity based on distance and particle speed
           const baseOpacity = (1 - distance / connectionDistance) * 0.4;
@@ -207,13 +230,14 @@ document.addEventListener("DOMContentLoaded", function () {
           const speed2 = particles[j].velocity.length();
           const speedBoost = Math.min((speed1 + speed2) * 0.1, 0.3);
 
-          const material = lineMaterial.clone();
-          material.opacity = baseOpacity + speedBoost;
-
-          const line = new THREE.Line(geometry, material);
-          scene.add(line);
+          line.material.opacity = baseOpacity + speedBoost;
         }
       }
+    }
+
+    // Hide unused lines
+    for (let i = lineIndex; i < linePool.length; i++) {
+      linePool[i].visible = false;
     }
 
     // Enhanced camera movement with smooth parallax

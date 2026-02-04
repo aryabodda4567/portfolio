@@ -11,6 +11,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- OPTIMIZED: font-display=swap for faster rendering -->
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;700&display=swap"
     rel="stylesheet">
@@ -105,6 +106,10 @@
             </p>
             <ul class="about-stats">
               <li>
+                <strong class="stat-number">300+</strong>
+                <span class="stat-label">LeetCode Solved</span>
+              </li>
+              <li>
                 <strong class="stat-number">10+</strong>
                 <span class="stat-label">Projects Shipped</span>
               </li>
@@ -195,13 +200,13 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script src="3d-background.js"></script>
-  <script src="logs-script.js"></script> <!-- Keeping legacy logger -->
-  <script src="script.js"></script>
+  <!-- Scripts - OPTIMIZED: Deferred for faster initial load -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script defer src="3d-background.js"></script>
+  <script defer src="logs-script.js"></script> <!-- Keeping legacy logger -->
+  <script defer src="script.js"></script>
 </body>
 
 </html>
