@@ -1,222 +1,564 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="Arya Bodda - Full Stack Engineer, AI Specialist & Blockchain Developer. Explore my portfolio of advanced web applications and intelligent systems.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arya | Backend & Cybersecurity</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Load Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-  <!-- Security Headers -->
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="X-Frame-Options" content="DENY">
-  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
-  <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self' https://api.ipify.org https://ipapi.co; frame-ancestors 'none';">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+        }
 
-  <title>Arya Bodda | Architecting the Future</title>
+        /* The canvas covers the entire background */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0; /* Behind the UI */
+            pointer-events: auto;
+        }
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- OPTIMIZED: font-display=swap for faster rendering -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;700&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        /* UI overlay sits on top */
+        #ui-layer {
+            position: relative;
+            z-index: 10;
+            pointer-events: none; /* Let mouse events pass through to canvas */
+        }
 
-  <!-- Styles -->
-  <link href="style.css" rel="stylesheet">
+        /* Re-enable pointer events for specific interactive UI elements */
+        .interactive-ui {
+            pointer-events: auto;
+        }
+
+        /* Glassmorphism styling for cards */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 242, 255, 0.5);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 242, 255, 1);
+        }
+    </style>
 </head>
+<body>
 
-<body class="loading">
-  <!-- Custom Cursor -->
-  <div class="cursor-dot" data-cursor-dot></div>
-  <div class="cursor-outline" data-cursor-outline></div>
+    <!-- WebGL Canvas Container -->
+    <canvas id="webgl-canvas"></canvas>
 
-  <!-- Background -->
-  <div id="canvas-container"></div>
-  <div class="noise-overlay"></div>
-
-  <!-- Navigation -->
-  <header class="glass-header">
-    <a href="#" class="logo">AB<span class="dot">.</span></a>
-
-    <div class="menu-toggle" aria-label="Toggle Menu">
-      <div class="hamburger">
-        <span></span>
-        <span></span>
-      </div>
-    </div>
-
-    <nav class="nav-menu">
-      <ul>
-        <li><a href="#about" class="nav-link" data-text="About">About</a></li>
-        <li><a href="#skills" class="nav-link" data-text="Expertise">Expertise</a></li>
-        <li><a href="#projects" class="nav-link" data-text="Works">Works</a></li>
-        <li><a href="#contact" class="nav-link" data-text="Contact">Contact</a></li>
-        <li><a href="./Resume_Arya_Bodda.pdf" target="_blank" class="nav-link resume-btn">Resume</a></li>
-        <li><a href="./logs.html" class="nav-link logs-btn"><i class="fas fa-terminal"></i> Logs</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main>
-    <!-- Hero Section -->
-    <section id="home" class="hero-section">
-      <div class="hero-content">
-        <span class="eyebrow fade-in-up">Hello, I'm Arya Bodda</span>
-        <h1 class="glitch-text fade-in-up delay-1" data-text="Engineering_Intelligence">
-          Engineering<br>
-          <span class="gradient-text">Intelligence</span>
-        </h1>
-        <p class="hero-subtitle fade-in-up delay-2">
-          Architecting scalable <strong>Full Stack</strong> solutions, immersive <strong>Web3</strong> experiences, and
-          autonomous <strong>AI Agents</strong>.
-        </p>
-        <div class="cta-group fade-in-up delay-3">
-          <a href="#projects" class="btn primary-btn magnetic">
-            <span>View Selected Works</span>
-            <i class="fas fa-arrow-right"></i>
-          </a>
-          <a href="#contact" class="btn secondary-btn magnetic">
-            <span>Let's Talk</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="scroll-indicator fade-in delay-4">
-        <span>Scroll to Explore</span>
-        <div class="mouse">
-          <div class="wheel"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="section about-section">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">01. Identity</span>
-          <h2 class="section-title">Beyond the <span class="highlight">Code</span></h2>
-        </div>
-
-        <div class="about-grid">
-          <div class="about-text glass-card">
-            <p>
-              I don't just write code; I build <strong>digital ecosystems</strong>. As a Computer Science undergraduate,
-              my passion lies at the intersection of performance and intelligence.
-            </p>
-            <p>
-              From optimizing low-level backend logic to designing fluid front-end interfaces, I thrive on complexity.
-              My recent focus has shifted towards <strong>Artificial Intelligence</strong> and
-              <strong>Blockchain</strong>, exploring how decentralized systems can empower autonomous agents.
-            </p>
-            <ul class="about-stats">
-              <li>
-                <strong class="stat-number">300+</strong>
-                <span class="stat-label">LeetCode Solved</span>
-              </li>
-              <li>
-                <strong class="stat-number">10+</strong>
-                <span class="stat-label">Projects Shipped</span>
-              </li>
-              <li>
-                <strong class="stat-number">3+</strong>
-                <span class="stat-label">Years Coding</span>
-              </li>
-              <li>
-                <strong class="stat-number">∞</strong>
-                <span class="stat-label">Hours Debugging</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="section skills-section">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">02. Arsenal</span>
-          <h2 class="section-title">Technical <span class="highlight">Proficiency</span></h2>
-        </div>
-
-        <div class="skills-wrapper" id="skills-container">
-          <!-- Injected via JS -->
-        </div>
-      </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="section projects-section">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">03. Creation</span>
-          <h2 class="section-title">Selected <span class="highlight">Works</span></h2>
-        </div>
-
-        <div class="projects-grid" id="projects-container">
-          <!-- Injected via JS -->
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="section contact-section">
-      <div class="container">
-        <div class="contact-wrapper glass-card">
-          <div class="contact-content">
-            <span class="section-tag">04. Connection</span>
-            <h2 class="big-heading">Ready to Innovate?</h2>
-            <p>Whether you have a groundbreaking idea, a question, or just want to say hi, my inbox is always open.</p>
-
-            <a href="mailto:aryabodda@gmail.com" class="btn primary-btn magnetic large-btn">
-              <span>aryabodda@gmail.com</span>
-              <i class="fas fa-paper-plane"></i>
-            </a>
-
-            <div class="social-links-big">
-              <a href="https://linkedin.com/in/arya-bodda/" target="_blank" class="social-item">
-                <i class="fab fa-linkedin-in"></i>
-                <span>LinkedIn</span>
-              </a>
-              <a href="https://github.com/aryabodda4567" target="_blank" class="social-item">
-                <i class="fab fa-github"></i>
-                <span>GitHub</span>
-              </a>
-              <a href="https://twitter.com/aryabodda" target="_blank" class="social-item">
-                <i class="fab fa-twitter"></i>
-                <span>Twitter</span>
-              </a>
+    <!-- UI Overlay Layer -->
+    <div id="ui-layer" class="w-full min-h-screen flex flex-col items-center justify-between p-6 sm:p-12">
+        
+        <!-- Header / Nav -->
+        <header class="w-full max-w-7xl flex justify-between items-center py-4 interactive-ui">
+            <div class="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                Arya_
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+ 		<a href="mailto:aryabodda@gmail.com">
+    <button class="glass-panel px-6 py-2 rounded-full text-sm font-medium hover:bg-white/10 transition-all duration-300">
+        Contact Me
+    </button>
+</a>
+        </header>
 
-  <footer class="main-footer">
-    <div class="container">
-      <div class="footer-bottom">
-        <p>&copy; 2026 Arya Bodda. Built with <i class="fas fa-heart highlight"></i> and code.</p>
-        <div class="footer-links">
-          <a href="#">Back to Top</a>
+        <!-- Main Hero Content -->
+        <main class="flex-grow flex flex-col items-center justify-center text-center mt-20 sm:mt-12 max-w-4xl interactive-ui">
+            <h1 class="text-5xl sm:text-7xl font-black mb-6 leading-tight drop-shadow-2xl">
+                Hi, I'm Arya. <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">
+                    Backend Developer &<br>Cybersecurity Engineer.
+                </span>
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-300 mb-10 max-w-3xl font-light">
+                I engineer infrastructure from the protocols up. Specializing in secure, low-level systems, scalable architectures, and bridging the gap between Java backends, Network Engineering, and VAPT with a <strong>security-first</strong> mindset.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="#projects" class="glass-panel px-8 py-4 rounded-xl font-bold text-cyan-400 hover:text-white hover:bg-cyan-500/20 transition-all duration-300 transform hover:scale-105 border-cyan-500/30 text-center">
+                    View My Engineering Work
+                </a>
+<a 
+    href="./Resume_Arya_Bodda.pdf" 
+    download="Resume_Arya_Bodda.pdf"
+    class="glass-panel px-8 py-4 rounded-xl font-bold text-white hover:bg-white/10 transition-all duration-300 transform hover:scale-105 border-transparent inline-block"
+>
+    Download Resume
+</a>
+            </div>
+        </main>
+
+        <!-- Catchy Points (Cards) -->
+        <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 interactive-ui">
+            
+            <!-- Point 1 -->
+            <div class="glass-panel rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-2 cursor-default group border-t-4 border-t-blue-500">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">
+                    ⚙️
+                </div>
+                <h3 class="text-xl font-bold mb-3 text-white">Backend & Systems</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-5">
+                    Expert in Java (Spring Boot) and Node JS, focusing on distributed systems, scalable APIs, and P2P networking architectures.
+                </p>
+                <div class="flex flex-wrap gap-2 text-xs font-mono text-blue-300">
+                    <span class="bg-blue-500/20 px-2 py-1 rounded">Java</span>
+                    <span class="bg-blue-500/20 px-2 py-1 rounded">Node Js</span>
+                    <span class="bg-blue-500/20 px-2 py-1 rounded">Spring Boot</span>
+                </div>
+            </div>
+
+            <!-- Point 2 -->
+            <div class="glass-panel rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-2 cursor-default group border-t-4 border-t-purple-500">
+                <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">
+                    🛡️
+                </div>
+                <h3 class="text-xl font-bold mb-3 text-white">Cybersecurity & Networking</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-5">
+                    Deep knowledge of TCP/IP, Splunk, Application Protcols and Network Forensics. Proficient in Kali Linux and VAPT workflows.
+                </p>
+                <div class="flex flex-wrap gap-2 text-xs font-mono text-purple-300">
+                    <span class="bg-purple-500/20 px-2 py-1 rounded">VAPT</span>
+                    <span class="bg-purple-500/20 px-2 py-1 rounded">Splunk</span>
+                    <span class="bg-purple-500/20 px-2 py-1 rounded">TCP/IP</span>
+                </div>
+            </div>
+
+            <!-- Point 3 -->
+            <div class="glass-panel rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-2 cursor-default group border-t-4 border-t-cyan-500">
+                <div class="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">
+                    🧠
+                </div>
+                <h3 class="text-xl font-bold mb-3 text-white">AI Integration</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-5">
+                    Implementing Retrieval-Augmented Generation (RAG) and Spring AI to bridge LLMs securely with private datasets.
+                </p>
+                <div class="flex flex-wrap gap-2 text-xs font-mono text-cyan-300">
+                    <span class="bg-cyan-500/20 px-2 py-1 rounded">RAG</span>
+                    <span class="bg-cyan-500/20 px-2 py-1 rounded">Vector DBs</span>
+                    <span class="bg-cyan-500/20 px-2 py-1 rounded">Spring AI</span>
+                    <span class="bg-cyan-500/20 px-2 py-1 rounded">Python</span>
+                </div>
+            </div>
         </div>
-      </div>
+
+          <!-- The Transition Journey Section -->
+        <div class="w-full max-w-5xl mt-24 interactive-ui z-10">
+            <h2 class="text-3xl sm:text-4xl font-black mb-3 text-white text-center drop-shadow-md">The Evolution</h2>
+            <p class="text-gray-400 text-center mb-12 max-w-2xl mx-auto">The transition from academic engineering to enterprise-grade cybersecurity.</p>
+
+            <div class="relative border-l-2 border-white/10 ml-4 sm:ml-12 lg:ml-24 space-y-12 pb-4">
+                
+                <!-- Timeline Item 1: College/Foundation -->
+                <div class="relative pl-8 sm:pl-12 group">
+                    <div class="absolute -left-[13px] top-1 w-6 h-6 rounded-full bg-[#050505] border-2 border-cyan-500 group-hover:bg-cyan-500 transition-colors duration-300 shadow-[0_0_10px_rgba(0,242,255,0.5)]"></div>
+                    <div class="glass-panel p-6 sm:p-8 rounded-xl hover:bg-white/10 transition-all duration-300 border-l-4 border-l-transparent group-hover:border-l-cyan-500">
+                        <span class="text-cyan-400 text-sm font-mono font-bold tracking-wider uppercase">The Foundation (2020 - Present)</span>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white mt-2 mb-3">Academic Excellence & Logic Building</h3>
+                        <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+                            My engineering journey started from the ground up. Securing a <strong>92% in my Computer Engineering Diploma</strong> and currently holding an <strong>8.5 CGPA in my B.Tech CSE</strong>, I spent these years building a rigid foundation. Instead of just learning frameworks, I focused on low-level programming (C), Object-Oriented design (Java), and algorithmic efficiency—solving <strong>300+ LeetCode problems</strong> to sharpen my problem-solving logic.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2: Internship / Deloitte (CURRENTLY ACTIVE) -->
+                <div class="relative pl-8 sm:pl-12 group">
+                    <!-- Pulsing Active Dot -->
+                    <div class="absolute -left-[13px] top-1 flex h-6 w-6">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-60"></span>
+                        <span class="relative inline-flex rounded-full h-6 w-6 bg-[#050505] border-2 border-purple-400 shadow-[0_0_15px_rgba(168,85,247,1)] group-hover:bg-purple-500 transition-colors duration-300"></span>
+                    </div>
+                    
+                    <!-- Highlighted Panel -->
+                    <div class="glass-panel p-6 sm:p-8 rounded-xl bg-gradient-to-br from-purple-900/20 to-transparent border border-purple-500/30 hover:bg-purple-900/30 transition-all duration-300 border-l-4 border-l-purple-500 shadow-[0_0_25px_rgba(168,85,247,0.15)] transform -translate-y-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-2">
+                            <span class="text-purple-400 text-sm font-mono font-bold tracking-wider uppercase">The Transition Phase</span>
+                            <span class="bg-gradient-to-r from-purple-600 to-pink-500 text-white text-xs px-3 py-1 rounded-full font-bold shadow-[0_0_10px_rgba(168,85,247,0.5)] animate-pulse">Currently Here</span>
+                            <span class="bg-purple-500/20 text-purple-300 text-xs px-2 py-1 rounded border border-purple-500/30 font-bold">Internship & Training</span>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-3 drop-shadow-md">Deloitte Cyber Gurukul & Cyber Security</h3>
+                        <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
+                            The critical pivot from academic theory to enterprise reality. Participating in the prestigious <strong>Deloitte Cyber Gurukul Program</strong> acted as my bridge into the professional cybersecurity ecosystem. 
+                        </p>
+                        <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                            This experience cultivated my "security-first" mindset. It moved me beyond basic socket programming into understanding advanced threat landscapes, VAPT workflows, and enterprise defensive architectures. This was the catalyst that merged my programming skills with deep-level network security.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Projects Grid Section -->
+        <div id="projects" class="w-full max-w-7xl mt-24 interactive-ui z-10">
+            <h2 class="text-3xl sm:text-4xl font-black mb-3 text-white text-center drop-shadow-md">Engineered Projects</h2>
+            <p class="text-gray-400 text-center mb-12 max-w-2xl mx-auto">Complex problem-solving ranging from decentralized networking protocols to secure AI data pipelines.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Project 1 -->
+                <div class="glass-panel p-6 rounded-xl flex flex-col h-full hover:bg-white/10 transition-colors duration-300 group">
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">Decentralized DNS</h3>
+                    <p class="text-gray-400 text-sm mb-4 flex-grow">A P2P DNS system replacing centralized models with blockchain-inspired consensus and elliptic curve cryptography.</p>
+                    <div class="flex flex-wrap gap-2 mb-6 text-xs font-mono text-gray-300">
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">Java</span>
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">SQLite</span>
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">P2P</span>
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">DNS</span>
+                    </div>
+                    <a href="https://github.com/aryabodda4567/ddns" target="_blank" class="text-cyan-400 text-sm font-bold hover:text-white flex items-center gap-1 w-max">
+                        View Source <span class="text-lg leading-none">→</span>
+                    </a>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="glass-panel p-6 rounded-xl flex flex-col h-full hover:bg-white/10 transition-colors duration-300 group">
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Custom Layer 3 VPN</h3>
+                    <p class="text-gray-400 text-sm mb-4 flex-grow">A functional VPN built in C utilizing TUN interfaces and XOR encryption for secure, low-level packet manipulation. Built with custom vpn protocol</p>
+                    <div class="flex flex-wrap gap-2 mb-6 text-xs font-mono text-gray-300">
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">C</span>
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">Networking</span>
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">Encryption</span>
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">VPN</span>
+                    </div>
+                    <a href="https://github.com/aryabodda4567/VPN" target="_blank" class="text-purple-400 text-sm font-bold hover:text-white flex items-center gap-1 w-max">
+                        View Source <span class="text-lg leading-none">→</span>
+                    </a>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="glass-panel p-6 rounded-xl flex flex-col h-full hover:bg-white/10 transition-colors duration-300 group">
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">RAG Pipeline</h3>
+                    <p class="text-gray-400 text-sm mb-4 flex-grow">A high-performance RAG pipeline with <span>Spring AI</span> that transforms natural language into secure SQL queries for intelligent database retrieval.</p>
+                    <div class="flex flex-wrap gap-2 mb-6 text-xs font-mono text-gray-300">
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">Spring Boot</span>
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">AI</span>
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">Vector DBs</span>
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">RAG</span>
+                    </div>
+                    <a href="https://github.com/aryabodda4567/RAG" target="_blank" class="text-blue-400 text-sm font-bold hover:text-white flex items-center gap-1 w-max">
+                        View Source <span class="text-lg leading-none">→</span>
+                    </a>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="glass-panel p-6 rounded-xl flex flex-col h-full hover:bg-white/10 transition-colors duration-300 group">
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">Email Tracker</h3>
+                    <p class="text-gray-400 text-sm mb-4 flex-grow">An email tracking application built on pixel-tracking technology for real-time monitoring of email opens, engagement, and delivery analytics.</p>
+                    <div class="flex flex-wrap gap-2 mb-6 text-xs font-mono text-gray-300">
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">Java</span>
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">Spring Boot</span>
+                    </div>
+                    <a href="https://github.com/aryabodda4567/email-tracker" target="_blank" class="text-cyan-400 text-sm font-bold hover:text-white flex items-center gap-1 w-max">
+                        View Source <span class="text-lg leading-none">→</span>
+                    </a>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="glass-panel p-6 rounded-xl flex flex-col h-full hover:bg-white/10 transition-colors duration-300 group">
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Network File Sharing</h3>
+                    <p class="text-gray-400 text-sm mb-4 flex-grow">A Java-based LAN file transfer application enabling fast, secure, and seamless file sharing between computers over local networks.</p>
+                    <div class="flex flex-wrap gap-2 mb-6 text-xs font-mono text-gray-300">
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">Networking</span>
+                        <span class="bg-white/10 px-2 py-1 rounded border border-white/5">Sys Programming</span>
+                         <span class="bg-white/10 px-2 py-1 rounded border border-white/5">LAN</span>
+                    </div>
+                    <a href="https://github.com/aryabodda4567/lanboy" target="_blank" class="text-purple-400 text-sm font-bold hover:text-white flex items-center gap-1 w-max">
+                        View Source <span class="text-lg leading-none">→</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vision / Personal Interests Footer -->
+        <div class="w-full max-w-4xl mt-24 mb-16 interactive-ui text-center">
+            <div class="glass-panel p-8 rounded-2xl bg-gradient-to-b from-white/5 to-transparent border-t border-white/10 shadow-2xl">
+                <h3 class="text-2xl font-bold text-white mb-4">Beyond the Terminal</h3>
+                <p class="text-gray-400 leading-relaxed mb-6 font-light">
+                    When I'm not solving LeetCode challenges (300+ and counting) or analyzing network packets, I'm decoding geopolitics, tracking financial markets, and understanding how power moves across the world.
+                    <br><br>
+                    My ultimate vision? Transitioning to a self-sustained, rural lifestyle—applying the very same engineering principles of efficiency and independence to off-grid farming.
+                </p>
+                <div class="text-cyan-400 font-mono text-sm tracking-wide bg-cyan-900/30 inline-block px-4 py-2 rounded-full border border-cyan-500/30">
+                    📍 Srikakulam, AP, India &nbsp;|&nbsp; 🎓 B.Tech CSE (8.5 CGPA)
+                </div>
+            </div>
+        </div>
+
     </div>
-  </footer>
 
-  <!-- Scripts - OPTIMIZED: Deferred for faster initial load -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script defer src="3d-background.js"></script>
-  <script defer src="logs-script.js"></script> <!-- Keeping legacy logger -->
-  <script defer src="script.js"></script>
+    <script>
+        let scene, camera, renderer;
+        let coreGroup, innerCore, outerWireframe;
+        let rings = [];
+        let particles, pointLight;
+        
+        // Mouse tracking variables
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        // Color palette for clicks (Cybersecurity theme)
+        const colors = [0x00f2ff, 0x9d00ff, 0xff0055, 0x00ff88, 0xffaa00];
+        let currentColorIndex = 0;
+        
+        // Animation states
+        let baseSpinSpeed = 0.005;
+        let currentSpinSpeed = baseSpinSpeed;
+        let particleVelocities = [];
+
+        function init() {
+            // 1. Setup Scene
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x050505, 0.002);
+
+            // 2. Setup Camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 35;
+
+            // 3. Setup Renderer mapping to our canvas
+            const canvas = document.getElementById('webgl-canvas');
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // 4. Setup Lighting for the solid core
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+            scene.add(ambientLight);
+            
+            pointLight = new THREE.PointLight(colors[currentColorIndex], 2, 100);
+            pointLight.position.set(0, 0, 0);
+            scene.add(pointLight);
+
+            // Create a group to hold the entire core structure
+            coreGroup = new THREE.Group();
+            scene.add(coreGroup);
+
+            // Layer 1: Inner Solid Core (Icosahedron)
+            const innerGeo = new THREE.IcosahedronGeometry(6, 0);
+            const innerMat = new THREE.MeshStandardMaterial({
+                color: 0x0a0a0a,
+                emissive: colors[currentColorIndex],
+                emissiveIntensity: 0.4,
+                flatShading: true,
+                wireframe: false
+            });
+            innerCore = new THREE.Mesh(innerGeo, innerMat);
+            coreGroup.add(innerCore);
+
+            // Layer 2: Outer Wireframe Shell (Network Layer)
+            const outerGeo = new THREE.IcosahedronGeometry(8.5, 1);
+            const outerMat = new THREE.MeshBasicMaterial({
+                color: colors[currentColorIndex],
+                wireframe: true,
+                transparent: true,
+                opacity: 0.2
+            });
+            outerWireframe = new THREE.Mesh(outerGeo, outerMat);
+            coreGroup.add(outerWireframe);
+
+            // Layer 3: Orbiting Encryption Rings
+            for (let i = 0; i < 3; i++) {
+                const ringGeo = new THREE.TorusGeometry(12 + (i * 2.5), 0.05, 16, 100);
+                const ringMat = new THREE.MeshBasicMaterial({ 
+                    color: i % 2 === 0 ? 0x9d00ff : colors[currentColorIndex],
+                    transparent: true,
+                    opacity: 0.6
+                });
+                const ring = new THREE.Mesh(ringGeo, ringMat);
+                // Randomize initial tilt
+                ring.rotation.x = Math.random() * Math.PI;
+                ring.rotation.y = Math.random() * Math.PI;
+                // Store custom rotation axes
+                ring.userData = {
+                    rx: (Math.random() - 0.5) * 2,
+                    ry: (Math.random() - 0.5) * 2,
+                    rz: (Math.random() - 0.5) * 2
+                };
+                rings.push(ring);
+                coreGroup.add(ring);
+            }
+
+            const particleGeometry = new THREE.BufferGeometry();
+            const particleCount = 1500;
+            const posArray = new Float32Array(particleCount * 3);
+
+            for(let i = 0; i < particleCount; i++) {
+                // X, Y, Z positioning
+                posArray[i * 3] = (Math.random() - 0.5) * 150;
+                posArray[i * 3 + 1] = (Math.random() - 0.5) * 150;
+                posArray[i * 3 + 2] = (Math.random() - 0.5) * 100 - 20;
+                
+                // Assign individual upward velocity to each particle
+                particleVelocities.push(Math.random() * 0.05 + 0.02);
+            }
+
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.15,
+                color: 0x4488ff,
+                transparent: true,
+                opacity: 0.4,
+                blending: THREE.AdditiveBlending
+            });
+            
+            particles = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particles);
+
+            document.addEventListener('mousemove', onDocumentMouseMove);
+            document.addEventListener('mousedown', onDocumentMouseDown);
+            document.addEventListener('touchstart', onDocumentTouchStart, {passive: false});
+            document.addEventListener('touchmove', onDocumentTouchMove, {passive: false});
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function onDocumentMouseMove(event) {
+            mouseX = (event.clientX - windowHalfX) * 0.05;
+            mouseY = (event.clientY - windowHalfY) * 0.05;
+        }
+
+        function onDocumentTouchStart(event) {
+            if (event.touches.length === 1) {
+                mouseX = (event.touches[0].pageX - windowHalfX) * 0.05;
+                mouseY = (event.touches[0].pageY - windowHalfY) * 0.05;
+                triggerSystemOverdrive();
+            }
+        }
+
+        function onDocumentTouchMove(event) {
+            if (event.touches.length === 1) {
+                mouseX = (event.touches[0].pageX - windowHalfX) * 0.05;
+                mouseY = (event.touches[0].pageY - windowHalfY) * 0.05;
+            }
+        }
+
+        function onDocumentMouseDown(event) {
+            if (event.target.tagName !== 'BUTTON' && event.target.tagName !== 'A') {
+                triggerSystemOverdrive();
+            }
+        }
+
+        function triggerSystemOverdrive() {
+            currentColorIndex = (currentColorIndex + 1) % colors.length;
+            const newColor = colors[currentColorIndex];
+
+            // Update core emissive glow
+            innerCore.material.emissive.setHex(newColor);
+            
+            // Update wireframe
+            outerWireframe.material.color.setHex(newColor);
+            
+            // Update light source
+            pointLight.color.setHex(newColor);
+            pointLight.intensity = 5; // Flash bright
+
+            // Spike the rotation speed of the rings
+            currentSpinSpeed = 0.15;
+            
+            // Slight scale bump
+            coreGroup.scale.set(1.15, 1.15, 1.15);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // 1. Mouse Interaction Parallax
+            targetX = mouseX * 0.2;
+            targetY = mouseY * 0.2;
+            
+            coreGroup.rotation.y += (targetX - coreGroup.rotation.y) * 0.05;
+            coreGroup.rotation.x += (targetY - coreGroup.rotation.x) * 0.05;
+
+            // 2. Core Autonomous Rotations
+            innerCore.rotation.y -= 0.005;
+            outerWireframe.rotation.y += 0.002;
+            outerWireframe.rotation.x -= 0.002;
+
+            // 3. Ring Rotations (Encryption rings spinning)
+            rings.forEach(ring => {
+                ring.rotation.x += ring.userData.rx * currentSpinSpeed;
+                ring.rotation.y += ring.userData.ry * currentSpinSpeed;
+                ring.rotation.z += ring.userData.rz * currentSpinSpeed;
+            });
+
+            // 4. Recover states after 'Overdrive' click
+            if (currentSpinSpeed > baseSpinSpeed) {
+                currentSpinSpeed *= 0.95; // Decay spin speed
+                if (currentSpinSpeed < baseSpinSpeed + 0.001) currentSpinSpeed = baseSpinSpeed;
+            }
+            
+            if (pointLight.intensity > 2) {
+                pointLight.intensity *= 0.95; // Decay light flash
+            }
+
+            if (coreGroup.scale.x > 1) {
+                const scaleDecay = 0.95;
+                coreGroup.scale.x *= scaleDecay;
+                coreGroup.scale.y *= scaleDecay;
+                coreGroup.scale.z *= scaleDecay;
+                if(coreGroup.scale.x < 1.01) coreGroup.scale.set(1,1,1);
+            }
+
+            // 5. Matrix-style Data Stream Particles
+            const positions = particles.geometry.attributes.position.array;
+            for(let i = 0; i < positions.length / 3; i++) {
+                // Move Y up
+                positions[i * 3 + 1] += particleVelocities[i];
+                
+                // If particle goes too high, reset to bottom
+                if (positions[i * 3 + 1] > 75) {
+                    positions[i * 3 + 1] = -75;
+                }
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
+            
+            // Subtle sway for the whole particle field
+            particles.rotation.y = Math.sin(Date.now() * 0.0005) * 0.1;
+
+            renderer.render(scene, camera);
+        }
+
+        window.onload = function() {
+            init();
+            animate();
+        };
+    </script>
 </body>
-
 </html>
